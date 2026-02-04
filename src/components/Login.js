@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header';
 import { checkValidData } from '../utlis/Validate';
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from '../utlis/Firebase';
 const Login = () => {
   
   const[isSignInForm,setIsSignInForm] = useState(true);
@@ -8,11 +10,68 @@ const Login = () => {
 
   const email = useRef(null);
   const password = useRef(null);
+  const name = useRef(null);
+
   const handleButtonClick = () => {
     // validate the form data
    const message = checkValidData(email.current.value , password.current.value);
-   console.log(message);
    setErrorMessage(message);
+
+  if(message) return ;
+
+  if(!isSignInForm) {
+    // Sign Up Logic - Validate username
+    if(!name.current || !name.current.value || name.current.value.trim() === "") {
+      setErrorMessage("Please enter a username");
+      return;
+    }
+
+    createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+      .then((userCredential) => {
+        // Signed up successfully
+        const user = userCredential.user;
+        const userName = name.current.value.trim();
+        
+        // Update the user's profile with the username
+        updateProfile(user, {
+          displayName: userName
+        }).then(() => {
+          console.log("User profile updated with username:", userName);
+          console.log("User displayName:", user.displayName);
+          // Clear error message on success
+          setErrorMessage(null);
+        }).catch((error) => {
+          console.error("Error updating profile:", error);
+          setErrorMessage("Error updating username: " + error.message);
+        });
+        console.log("User signed up:", user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorCode + "-" + errorMessage);
+        console.error("Sign-up error:", errorCode, errorMessage);
+      });
+
+  }
+  else {
+    // Sign In Logic
+    signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("User signed in:", user);
+        console.log("User displayName:", user.displayName);
+        setErrorMessage(null);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorCode + "-" + errorMessage);
+        console.error("Sign-in error:", errorCode, errorMessage);
+      });
+  }
+
   };
 
   const toggleSignInForm = () => {
@@ -27,6 +86,7 @@ const Login = () => {
       <form onSubmit={(e) => e.preventDefault()} className= ' w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 bg-opacity-80'>
         <h1 className="text-white text-3xl font-bold mb-6">{isSignInForm ? "Sign In" : "Sign Up"}</h1>
         {!isSignInForm && (<input 
+          ref={name}
           type = "text" 
           placeholder= "UserName" 
           className= "w-full p-4 mb-6 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-white" 
