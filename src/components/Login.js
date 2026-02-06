@@ -1,12 +1,25 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import Header from './Header';
 import { checkValidData } from '../utlis/Validate';
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../utlis/Firebase';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUser } from '../utlis/userSlice';
+
 const Login = () => {
-  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
   const[isSignInForm,setIsSignInForm] = useState(true);
   const[errorMessage,setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    // If user is already logged in, redirect to Browse
+    if (user) {
+      navigate("/Browse");
+    }
+  }, [user, navigate]);
 
   const email = useRef(null);
   const password = useRef(null);
@@ -37,9 +50,11 @@ const Login = () => {
           displayName: userName
         }).then(() => {
           console.log("User profile updated with username:", userName);
-          console.log("User displayName:", user.displayName);
-          // Clear error message on success
-          setErrorMessage(null);
+          // Update Redux store with user info
+          const {uid, email, displayName} = user;
+          dispatch(addUser({uid, email, displayName}));
+          // Navigate to browse page
+          navigate("/Browse");
         }).catch((error) => {
           console.error("Error updating profile:", error);
           setErrorMessage("Error updating username: " + error.message);
@@ -61,7 +76,11 @@ const Login = () => {
         // Signed in
         const user = userCredential.user;
         console.log("User signed in:", user);
-        console.log("User displayName:", user.displayName);
+        // Update Redux store with user info
+        const {uid, email, displayName} = user;
+        dispatch(addUser({uid, email, displayName}));
+        // Navigate to browse page
+        navigate("/Browse");
         setErrorMessage(null);
       })
       .catch((error) => {
@@ -93,7 +112,7 @@ const Login = () => {
         />)}
         <input 
           ref = {email}
-          type = "text" 
+          type = "email" 
           placeholder= "Email Address" 
           className = "w-full p-4 mb-4 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-white"
         />
