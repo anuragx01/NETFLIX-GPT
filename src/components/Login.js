@@ -6,6 +6,7 @@ import { auth } from '../utlis/Firebase';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser } from '../utlis/userSlice';
+import { LOGIN } from '../utlis/constants';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -100,7 +101,7 @@ const Login = () => {
     <div>
        <Header/>
        <div className='absolute'>
-        <img src = "https://assets.nflxext.com/ffe/siteui/vlv3/cc73e7c7-7860-4ef4-8fc8-1baf24569d2f/web/IN-en-20260126-TRIFECTA-perspective_90d714e8-acc9-4253-ab46-ca6b349c1989_small.jpg" alt = "logo"/>
+        <img src = {LOGIN} alt = "logo"/>
       </div>
       <form onSubmit={(e) => e.preventDefault()} className= ' w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 bg-opacity-80'>
         <h1 className="text-white text-3xl font-bold mb-6">{isSignInForm ? "Sign In" : "Sign Up"}</h1>

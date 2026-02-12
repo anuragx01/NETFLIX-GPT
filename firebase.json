@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "netflixgpt-712f4",
     "public": "build",
     "ignore": [
       "firebase.json",
