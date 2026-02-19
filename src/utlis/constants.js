@@ -2,6 +2,8 @@ export const LOGO = "https://help.nflxext.com/helpcenter/OneTrust/oneTrust_produ
 
 export const LOGIN = "https://assets.nflxext.com/ffe/siteui/vlv3/cc73e7c7-7860-4ef4-8fc8-1baf24569d2f/web/IN-en-20260126-TRIFECTA-perspective_90d714e8-acc9-4253-ab46-ca6b349c1989_small.jpg";
 
+export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500";
+
 export const API_OPTIONS = {
   method: 'GET',
   headers: {
@@ -9,3 +11,11 @@ export const API_OPTIONS = {
     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZDI4ZDM2NjRiNmQ2NThlZTM0Mzk4MWZjZDUwMTIyYSIsIm5iZiI6MTc3MTI2OTE0My40NDYsInN1YiI6IjY5OTM2YzE3ODBiYTA4ZWE4NDJhZjMxNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.dPpnedrYb5jCFEYbuqH014kJOuNt6VNTYkhxefI0XHc'
   }
 };
+
+export const SUPPORTED_LANGUAGES = [
+  { identifier: "en", name: "English" },
+  { identifier: "hindi", name: "Hindi" },
+  { identifier: "spanish", name: "Spanish" },
+];
+
+export const YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/";

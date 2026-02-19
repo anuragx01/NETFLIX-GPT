@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { removeUser } from '../utlis/userSlice';
 import { LOGO } from '../utlis/constants';
+import { toggleGptSearchView } from '../utlis/gptSlice';
 
 const Header = () => {
   const user = useSelector((store) => store.user);
@@ -28,6 +29,12 @@ const Header = () => {
        <img className = "w-44" src = {LOGO} alt = "Logo"/>
        {user && (
          <div className="flex items-center">
+          <button
+            onClick={() => dispatch(toggleGptSearchView())}
+            className="mr-3 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+          >
+            GPT Search
+          </button>
            <span className="text-white mr-4">{user.displayName || user.email}</span>
            <button 
              onClick={handleSignOut}
